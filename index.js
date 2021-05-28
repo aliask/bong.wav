@@ -1,6 +1,12 @@
+require('dotenv').config()
 const Discord = require('discord.js');
+
 const bot = new Discord.Client();
-bot.login('');
+if(!process.env.DISCORD_TOKEN) {
+  console.log(`No token defined`);
+  process.exit(1);
+}
+bot.login(process.env.DISCORD_TOKEN);
 
 let bongees = new Set();
 let admin = null;
@@ -41,6 +47,10 @@ bot.on('message', message => {
   }
 });
 
+function kbye(channel) {
+  channel.leave();
+}
+
 bot.on('voiceStateUpdate', (oldMember, newMember) => {
   let oldUserChannel = oldMember.channel;
   let newUserChannel = newMember.channel;
@@ -50,8 +60,7 @@ bot.on('voiceStateUpdate', (oldMember, newMember) => {
        newUserChannel.join().then(connection => {
           console.log(`Bong'd`);
           const dispatcher = connection.play("bong.wav");
-
-          dispatcher.on("end", end => {newUserChannel.leave()});
+          setTimeout(kbye, 2500, newUserChannel);
        }).catch(console.error);
     }
   } 
