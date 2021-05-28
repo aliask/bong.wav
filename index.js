@@ -21,19 +21,33 @@ function sub(user) {
   console.log(`${user.username} subbed`);
 }
 
+function bongChannel(channel) {
+  channel.join().then(connection => {
+    console.log(`Bong'd ${channel.name}`);
+    const dispatcher = connection.play("bong.wav");
+    setTimeout(kbye, 2500, channel);
+ }).catch(console.error);
+}
+
 bot.on('message', message => {
   let userid = message.author.id;
   let mentionedUser = message.mentions.users.first();
   if (message.content.startsWith('!bong')) {
-    if(mentionedUser && admin === userid) {
+    let voiceChannel = message.member.voice.channel;
+    if(mentionedUser && admin.id === userid) {
+      voiceChannel = mentionedUser.voice.channel;
+    }
+    bongChannel(voiceChannel);
+  } else if (message.content.startsWith('!sub') && admin.id === userid) {
+    if(mentionedUser) {
       sub(mentionedUser);
-      message.reply(`Ready to bong ${mentionedUser.username}`);
+      message.reply(`Bongs for ${mentionedUser.username}`);
     } else {
       sub(message.author);
-      message.reply("Get ready to bong");
+      message.reply("Bongs for you");
     }
-  } else if (message.content.startsWith('!nobong')) {
-    if(mentionedUser && admin === userid) {
+  } else if (message.content.startsWith('!unsub')) {
+    if(mentionedUser && admin.id === userid) {
       unsub(mentionedUser);
       message.reply(`No bong for ${mentionedUser.username}`);
     } else {
@@ -41,7 +55,7 @@ bot.on('message', message => {
       message.reply("No bong for you");
     }
   } else if (message.content.startsWith('!admin') && admin == null) {
-    admin = userid;
+    admin = message.author;
     message.reply('Superbong');
     console.log(`${message.author.username} became admin`);
   }
@@ -55,13 +69,10 @@ bot.on('voiceStateUpdate', (oldMember, newMember) => {
   let oldUserChannel = oldMember.channel;
   let newUserChannel = newMember.channel;
 
+  // Only bong if joining voice (rather than switching channels)
   if(!oldUserChannel && newUserChannel) {
-    if (bongees.has(newMember.id)) {   
-       newUserChannel.join().then(connection => {
-          console.log(`Bong'd`);
-          const dispatcher = connection.play("bong.wav");
-          setTimeout(kbye, 2500, newUserChannel);
-       }).catch(console.error);
+    if (bongees.has(newMember.id)) {
+      bongChannel(newUserChannel);
     }
   } 
 });
