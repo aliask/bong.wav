@@ -8,6 +8,15 @@ Eventually, the headset would light up! And as the microphone turned on, it woul
 
 But not before recording the sound of the old headset. *I had plans...*
 
+## Setup
+
+1. You will need to create a Discord bot. Discord has [very good docs](https://discord.com/developers/docs/intro) for this.
+1. Once you've got this set up, grab the API token and add this to the `.env` file (or directly to the `docker-compose.yml` file)
+1. Run docker-compose up -d
+1. Add the bot to the target server
+1. DM the bot with commands - e.g. become admin with `!admin`
+
+
 ## Usage
 
 All interaction with the bot is done via messages. Message the bot with the following commands to interact with it.
@@ -30,7 +39,9 @@ Users may unsubscribe themselves, and the admin may unsubscribe others.
 
 ## Requriements
 
-- [discord.js](https://github.com/discordjs/discord.js)
-- [ffmpeg](https://github.com/FFmpeg/FFmpeg)
-- [@discordjs/opus](https://github.com/discordjs/opus)
-- dotenv
+- Docker and docker-compose
+- Discord account/app
+
+## Demo
+
+![Demo screencapture](/bong.gif)
