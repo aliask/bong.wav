@@ -1,0 +1,9 @@
+version: "3.3"
+services:
+  bong:
+    build: .
+    restart: unless-stopped
+    volumes:
+      - .:/app
+    environment:
+      DISCORD_TOKEN: null
