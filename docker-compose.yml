@@ -1,4 +1,4 @@
-version: "3.3"
+version: "2.2"
 services:
   bong:
     build: .
@@ -7,3 +7,5 @@ services:
       - .:/app
     environment:
       DISCORD_TOKEN: null
+    mem_limit: 512m
+    memswap_limit: 1g
